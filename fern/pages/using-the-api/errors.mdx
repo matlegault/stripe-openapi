@@ -1,0 +1,36 @@
+---
+title: "Handling errors"
+---
+
+This page explains where the Error object sits in the Stripe OpenAPI spec and how to approach failed API calls from generated clients.
+
+The spec excerpt available for this page does not show the error schema itself. Confirm every field name and value against the spec file before you write error-handling code. (needs confirmation)
+
+## Error object shape
+
+The Stripe specs list the Error object as one of their key concepts. The recommended GA spec, `latest/openapi.spec3.json`, describes 703 operations, and failures from those operations are described by this object.
+
+The schema definitions live under `components` in the spec file, the same place as the `securitySchemes` definitions.
+
+To see the exact properties, open `latest/openapi.spec3.json` and find the error schema in `components`. The names of its properties, and which of them are required, (needs confirmation) from the spec.
+
+## Error types and codes
+
+The set of error types and codes that an operation can return (needs confirmation). Read the enumerated values in the error schema of the spec you generate from, and do not hard-code values from memory.
+
+If you use the SDK spec or the preview spec, check that variant's schema separately, because the variants can differ. See [Public and SDK specs](/choosing-a-spec/spec-variants) and [GA, public preview and private preview](/choosing-a-spec/release-phases). (needs confirmation)
+
+## Handling errors in generated clients
+
+Both security schemes in the spec, `basicAuth` and `bearerAuth`, use Stripe API keys against `https://api.stripe.com/`. A request that fails because of a missing or wrong key is therefore one of the failures your client has to handle.
+
+How a generated client exposes error responses, for example as typed exceptions or as result objects, depends on the generator you use. The spec does not define this (needs confirmation). For generator-specific caveats, see [Generating SDKs and clients](/building-tools/generating-sdks).
+
+Related pages:
+
+- [Authenticating with API keys](/get-started/authentication) - configure the security schemes in generated clients
+- [Request encoding](/using-the-api/request-encoding) - send correctly encoded requests so you avoid avoidable failures
+
+## What to retry
+
+The spec excerpt available for this page does not document retry behavior, idempotency or rate limits. Which failures are safe to retry, and how, (needs confirmation) from Stripe's API documentation. Do not infer a retry policy from the OpenAPI file alone.

@@ -1,0 +1,90 @@
+instances:
+- url: mathieu-s-org.docs.buildwithfern.com
+title: Stripe's OpenAPI Specification
+colors:
+  accent-primary:
+    light: '#635bff'
+    dark: '#92adff'
+  background:
+    light: '#fafaff'
+    dark: '#05050d'
+  border:
+    light: '#cfceda'
+    dark: '#2c2c37'
+logo:
+  light: logo-light.png
+  dark: logo-dark.png
+  height: 20
+favicon: logo-light.png
+tabs:
+  docs:
+    display-name: Docs
+    skip-slug: true
+  api:
+    display-name: API Reference
+    skip-slug: true
+layout:
+  tabs-placement: header
+  searchbar-placement: header
+navigation:
+- tab: docs
+  layout:
+  - section: Get started
+    slug: get-started
+    contents:
+    - page: Overview
+      path: ./pages/get-started/overview.mdx
+      slug: overview
+    - page: 'Quickstart: use a spec'
+      path: ./pages/get-started/quickstart.mdx
+      slug: quickstart
+    - page: Authenticating with API keys
+      path: ./pages/get-started/authentication.mdx
+      slug: authentication
+  - section: Choosing a spec
+    slug: choosing-a-spec
+    contents:
+    - page: Public and SDK specs
+      path: ./pages/choosing-a-spec/spec-variants.mdx
+      slug: spec-variants
+    - page: GA, public preview and private preview
+      path: ./pages/choosing-a-spec/release-phases.mdx
+      slug: release-phases
+    - page: v1 and v2 APIs in one spec
+      path: ./pages/choosing-a-spec/v1-and-v2.mdx
+      slug: v1-and-v2
+  - section: Spec conventions
+    slug: spec-conventions
+    contents:
+    - page: Vendor extensions
+      path: ./pages/spec-conventions/vendor-extensions.mdx
+      slug: vendor-extensions
+    - page: Expanding related objects
+      path: ./pages/spec-conventions/expanding-objects.mdx
+      slug: expanding-objects
+    - page: Working with fixtures
+      path: ./pages/spec-conventions/fixtures.mdx
+      slug: fixtures
+    - page: API groups and operation IDs
+      path: ./pages/spec-conventions/tags-and-operations.mdx
+      slug: tags-and-operations
+  - section: Using the API
+    slug: using-the-api
+    contents:
+    - page: Request encoding
+      path: ./pages/using-the-api/request-encoding.mdx
+      slug: request-encoding
+    - page: Handling errors
+      path: ./pages/using-the-api/errors.mdx
+      slug: errors
+  - section: Building with the specs
+    slug: building-tools
+    contents:
+    - page: Generating SDKs and clients
+      path: ./pages/building-tools/generating-sdks.mdx
+      slug: generating-sdks
+- tab: api
+  layout:
+  - api: Stripe API
+    api-name: api
+    slug: stripe-api

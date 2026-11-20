@@ -1,0 +1,41 @@
+---
+title: "Authenticating with API keys"
+---
+
+This page explains how the basicAuth and bearerAuth security schemes in the Stripe OpenAPI specs map to a Stripe API key in generated clients and tools.
+
+## Security schemes declared in the spec
+
+The specs declare two security schemes at the top level: `basicAuth` and `bearerAuth`. Both use Stripe API keys against `https://api.stripe.com/`.
+
+The scheme definitions live under `components/securitySchemes` in the spec files. Open that section in the spec you downloaded to see the exact definition your tool will read.
+
+The same scheme names apply to the other spec files in the repository, which differ in directory and variant. The README describes the directories (`latest/`, `preview/`, `openapi/`) and the public and SDK variants. Whether each file declares identical schemes is not shown in the sources (needs confirmation).
+
+## Basic auth with an API key
+
+The `basicAuth` scheme takes a Stripe API key. In your OpenAPI tool or generated client, supply the key as the credential for the `basicAuth` scheme. Use a placeholder such as `YOUR_API_KEY` in examples and configuration you commit.
+
+How a given tool splits the key between username and password fields is not described in the sources (needs confirmation). Check the tool's documentation for its basic-auth settings.
+
+## Bearer auth with an API key
+
+The `bearerAuth` scheme also takes a Stripe API key. Configure your tool or generated client with the key as the bearer token for `bearerAuth`, for example `YOUR_API_KEY`.
+
+Use one scheme or the other, whichever your tool handles best. The sources do not say which one Stripe prefers (needs confirmation).
+
+## Base URL
+
+Both schemes target `https://api.stripe.com/`. Point your client at this base URL when you send authenticated requests.
+
+The `latest/` directory covers both v1 and v2 endpoints in one file. For how those endpoints sit together, see [v1 and v2 APIs in one spec](/choosing-a-spec/v1-and-v2).
+
+## Keeping keys safe in generated clients
+
+The specs only declare the authentication schemes. The key itself is something you supply to the client or tool at runtime. Use `YOUR_API_KEY` placeholders in anything you share or commit, and load the real key from your own configuration.
+
+Next steps:
+
+- [Quickstart: use a spec](/get-started/quickstart) - download a spec and make a first call
+- [Generating SDKs and clients](/building-tools/generating-sdks) - generate client libraries from the SDK specs
+- [Handling errors](/using-the-api/errors) - interpret failures from API calls

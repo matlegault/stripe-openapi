@@ -1,0 +1,35 @@
+---
+title: "API groups and operation IDs"
+---
+
+This page explains how to use tags and operationIds in Stripe's OpenAPI specs to organise generated clients and find operations.
+
+## Tags as API groups
+
+Stripe's specs describe a large set of operations: the public spec holds 703 operations, and the SDK spec holds 650 operations.
+
+Tags are how the specs group these operations into API groups. Many generators use a tag to decide which client class or module an operation belongs to. The exact tag names and how many tags each file defines are not shown in the sources for this page (needs confirmation).
+
+To list the groups in a spec, read the top-level `tags` array and the `tags` field of each operation under `paths` in. Do the same in the SDK file if you generate from that variant.
+
+## operationId naming
+
+Every operation is identified by an `operationId`, which is the standard OpenAPI field that generators use to name client methods. It is the main handle for finding a single operation in.
+
+The naming pattern for `operationId` values is not shown in the sources for this page (needs confirmation). Search the `paths` object for the operation you need rather than assuming a pattern.
+
+Because the public and SDK files hold different numbers of operations, an `operationId` present in one file may be absent from the other. Check the file you generate from.
+
+## Stable IDs
+
+The specs use the `x-stableId` vendor extension on operations. Its role is to give an operation an identifier that you can rely on across spec versions, whereas names derived from paths or tags can change. The exact placement and format of `x-stableId` values are not shown in the sources for this page (needs confirmation).
+
+## Account and other core resources
+
+Core resources such as Account are described as schemas in the spec and have operations grouped under their own API group. The sources for this page do not show the Account paths or its tag, so confirm them directly in the spec file you use (needs confirmation).
+
+## Related pages
+
+- [Vendor extensions](/spec-conventions/vendor-extensions) - interpreting Stripe's x- extensions
+- [Public and SDK specs](/choosing-a-spec/spec-variants) - choosing between the two variants
+- [Generating SDKs and clients](/building-tools/generating-sdks) - generating client libraries from the SDK specs

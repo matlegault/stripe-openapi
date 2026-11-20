@@ -1,0 +1,45 @@
+---
+title: "GA, public preview and private preview"
+---
+
+This page explains which directory in the repository holds each release phase of the Stripe API specs and how the x-stripeReleasePhase extension marks it.
+
+## latest: GA release
+
+The `latest/` directory holds the latest generally available (GA) release. It contains both v1 and v2 API endpoints and events, so one file gives complete API coverage.
+
+The README marks `latest/` as the recommended directory and says to use its files to generate SDKs or client libraries for Stripe's API.
+
+## preview: public preview
+
+The `preview/` directory is the same as `latest/` but also includes public preview API endpoints. Use it for early access to upcoming API features before they reach GA.
+
+The directory includes an SDK spec, `preview/openapi.spec3.sdk.json`, which describes 803 operations.
+
+For more on the phases, the README points to Stripe's product release phases documentation.
+
+## Private preview SDK spec
+
+Private preview has its own file, `preview/openapi.private_preview.spec3.sdk.json`. It is an SDK-variant spec of the Stripe API and describes 1125 operations.
+
+Like other SDK specs, it exists to support generating Stripe API libraries. The README says most users should use the public variant instead.
+
+## x-stripeReleasePhase
+
+`x-stripeReleasePhase` is the vendor extension that marks the release phase of an item in the spec. The list of values it can take, and which objects carry it, are not covered by the sources for this page (needs confirmation). For the other extensions the README documents, see [Vendor extensions](/spec-conventions/vendor-extensions).
+
+## Beta headers (x-stripeBetaHeaders)
+
+The private preview SDK spec is the one that involves beta headers, which are marked with the `x-stripeBetaHeaders` extension. The exact structure of the extension and the header values are not covered by the sources for this page (needs confirmation).
+
+## Choosing a phase
+
+- Start with `latest/` for GA endpoints. It is the recommended directory and covers v1 and v2.
+- Use `preview/` when you need public preview endpoints ahead of GA.
+- Use `preview/openapi.private_preview.spec3.sdk.json` only when generating a client that needs the private preview operations.
+- The legacy `openapi/` directory is v1-only and still updated every release, but new projects should use `latest/`.
+
+Next steps:
+
+- [Public and SDK specs](/choosing-a-spec/spec-variants) - decide between the public and SDK variants
+- [v1 and v2 APIs in one spec](/choosing-a-spec/v1-and-v2) - how both API versions coexist in one file

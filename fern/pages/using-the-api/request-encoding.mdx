@@ -1,0 +1,32 @@
+---
+title: "Request encoding"
+---
+
+This page explains how to send correctly encoded requests to the Stripe API from clients generated from its OpenAPI spec, and which encoding details still need confirming against the spec.
+
+The encoding rules below are not yet confirmed against the spec file. Check each point in before you rely on it. That file describes 703 operations for the Stripe API, and it is the only source for this page.
+
+## Form-urlencoded bodies
+
+Request bodies for operations in the spec are expected to use the `application/x-www-form-urlencoded` content type (needs confirmation). To verify this, open an operation's `requestBody` in and check which media type it lists. Configure your generated client to serialize bodies as that media type, not as JSON.
+
+Requests are authenticated with the `basicAuth` or `bearerAuth` security scheme against `https://api.stripe.com/`, as declared under `components/securitySchemes` in. For setup, see [Authenticating with API keys](/get-started/authentication).
+
+## Nested objects and arrays
+
+The exact key syntax for nested objects and arrays in form-encoded bodies is not shown in the source material (needs confirmation). Read the schema of the parameter you want to send in, then check how your client serializes object and array properties. Do this before you send a request that uses them.
+
+The spec also describes an `expand` parameter and `x-expandableFields` annotations for requesting related objects, according to. The following page covers them in detail:
+
+- [Expanding related objects](/spec-conventions/expanding-objects) - use the expand parameter to request nested objects
+
+## deepObject query parameters
+
+Some query parameters may use the OpenAPI `deepObject` style for nested values (needs confirmation). To find them, search the `parameters` of the operations you call in for `style: deepObject`. Your client must support that style for those parameters to be sent correctly.
+
+## Pitfalls in OpenAPI generators
+
+The spec files are produced by a closed-source generator and are not targeted at openapi-generator, as described in the repository documentation for. Generated clients can therefore serialize requests differently from what the API expects, and you should test form-encoded bodies, nested parameters and `deepObject` query parameters against a real call before you depend on them (needs confirmation for specific generator behavior).
+
+- [Generating SDKs and clients](/building-tools/generating-sdks) - generator caveats and SDK spec guidance
+- [Handling errors](/using-the-api/errors) - interpret failures when a request is rejected
