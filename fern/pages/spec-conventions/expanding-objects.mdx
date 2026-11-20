@@ -1,0 +1,41 @@
+---
+title: "Expanding related objects"
+---
+
+How the Stripe OpenAPI specs describe expandable fields and the expand parameter, and what to consider when handling them in generated code.
+
+This page is limited to what the source specs confirm. Details that need a closer look at the spec files are marked `(needs confirmation)`.
+
+## What expansion does
+
+The Stripe specs use the vendor extensions `x-expandableFields` and `x-expansionResources`, and an `expand` parameter, to describe related objects that can be requested in nested form.
+
+The same conventions apply to the SDK variant, which adds annotations, deprecated endpoints and pre-release features for client generation.
+
+Whether a given response field is returned as a reference or as a full nested object depends on the request. The exact response schema for such fields should be read from the spec for each resource `(needs confirmation)`.
+
+## x-expandableFields
+
+`x-expandableFields` is a vendor extension that appears in the Stripe specs. It annotates schemas with the fields that support expansion.
+
+When processing a spec, read this extension on each object schema to learn which of its properties are expandable. The exact value format, such as a list of property names, should be checked in the spec file `(needs confirmation)`.
+
+## x-expansionResources
+
+`x-expansionResources` is a second vendor extension in the specs, used alongside `x-expandableFields`.
+
+It relates to the resources that an expandable field can be replaced with. Its precise structure and how it references schemas should be confirmed in the spec file `(needs confirmation)`.
+
+For the full list of Stripe extensions, see [Vendor extensions](/spec-conventions/vendor-extensions). (needs confirmation)
+
+## The expand parameter and deepObject style
+
+Operations that return expandable objects describe an `expand` parameter in the spec.
+
+Its serialization is described with OpenAPI parameter styles, such as `deepObject`, so that clients encode the nested values correctly `(needs confirmation)`. For how nested parameters are encoded on the wire, see [Request encoding](/using-the-api/request-encoding).
+
+## Handling expandable fields in generated types
+
+Generators and tooling that read need to decide how to represent a field that may be expanded. A typical approach is to treat such a field as either an identifier or a full object, based on the `x-expandableFields` annotation `(needs confirmation)`.
+
+For generator caveats, see [Generating SDKs and clients](/building-tools/generating-sdks). To choose between the public and SDK variants, see [Public and SDK specs](/choosing-a-spec/spec-variants). (needs confirmation)

@@ -1,0 +1,65 @@
+---
+title: "Working with fixtures"
+---
+
+Fixtures are sample representations of Stripe resources, and this page explains how to find the fixture for a resource through the x-resourceId extension.
+
+## What fixtures are
+
+A fixture is a sample representation of a resource. The repository README describes it as what you get when you look up a resource's example data.
+
+Fixtures are not embedded in the spec schemas. They live in separate files, and the spec points to them through a canonical resource name.
+
+## Linking via x-resourceId
+
+Resources in the spec include `x-resourceId`, a canonical name for each resource. You can use it together with the fixtures files to look up a resource's sample representation.
+
+The README's example shows a `charge` resource whose `x-resourceId` is `charge`. The fixtures file is a separate document that holds entries for resources such as `invoice_line_item`.
+
+```yaml
+# spec.yaml
+---
+definitions:
+  ...
+  charge:
+    ...
+    x-resourceId: charge
+
+# fixtures.yaml
+---
+invoice_line_item:
+  ...
+```
+
+
+
+The README does not spell out the full structure of a fixture entry. It shows the fixtures file as a document of named entries, with `invoice_line_item` as one example.
+
+For more on this and Stripe's other `x-` fields, see [Vendor extensions](/spec-conventions/vendor-extensions).
+
+## Fixture file formats
+
+The README names the fixture files as `openapi/fixtures{2,3}.{json,yaml}`. That covers `fixtures2` and `fixtures3`, each in JSON and YAML.
+
+| File | Formats |
+|------|---------|
+| `openapi/fixtures2` | `.json`, `.yaml` |
+| `openapi/fixtures3` | `.json`, `.yaml` |
+
+
+
+The README gives the path under `/openapi/`, the legacy v1-only directory. It does not say whether `latest/` or `preview/` carry their own fixtures files (needs confirmation).
+
+The README does not say how `fixtures2` differs from `fixtures3` (needs confirmation). All specification files are available in both JSON and YAML, so pick the format your tooling reads best.
+
+## Using fixtures in tooling
+
+Based on the README's description, a tool can follow these steps:
+
+1. Read `x-resourceId` from a resource in the spec, for example from a schema in `latest/openapi.spec3.json`.
+2. Load one of the `openapi/fixtures{2,3}.{json,yaml}` files.
+3. Look up the sample representation of that resource using the resource id.
+
+The README describes lookup of a sample representation as the purpose of this pairing. Sample data like this is a natural input for tests and mocks, but the README does not describe any built-in tooling for either.
+
+Both the public (`spec3`) and SDK (`spec3.sdk`) spec variants exist in JSON and YAML. See [Public and SDK specs](/choosing-a-spec/spec-variants) for how to choose between them.

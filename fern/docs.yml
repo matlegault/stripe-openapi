@@ -1,0 +1,93 @@
+instances:
+- url: mathieu-s-org.docs.buildwithfern.com
+title: Stripe's OpenAPI Specification
+colors:
+  accent-primary:
+    light: '#635bff'
+    dark: '#b9b9f9'
+  background:
+    light: '#fafaff'
+    dark: '#05050d'
+  border:
+    light: '#cfceda'
+    dark: '#2c2c37'
+logo:
+  light: logo-light.png
+  dark: logo-dark.png
+  height: 20
+favicon: logo-light.png
+tabs:
+  docs:
+    display-name: Docs
+    skip-slug: true
+  api:
+    display-name: API Reference
+    skip-slug: true
+layout:
+  tabs-placement: header
+  searchbar-placement: header
+navigation:
+- tab: docs
+  layout:
+  - section: Getting started
+    slug: getting-started
+    contents:
+    - page: Overview
+      path: ./pages/getting-started/overview.mdx
+      slug: overview
+    - page: 'Quickstart: use a spec'
+      path: ./pages/getting-started/quickstart.mdx
+      slug: quickstart
+    - page: Authentication
+      path: ./pages/getting-started/authentication.mdx
+      slug: authentication
+  - section: Concepts
+    slug: concepts
+    contents:
+    - page: Choosing the right spec file
+      path: ./pages/concepts/choosing-a-spec.mdx
+      slug: choosing-a-spec
+    - page: v1, v2 and release phases
+      path: ./pages/concepts/api-versions-and-release-phases.mdx
+      slug: api-versions-and-release-phases
+    - page: How the specs are organised
+      path: ./pages/concepts/spec-structure.mdx
+      slug: spec-structure
+    - page: Vendor extensions and fixtures
+      path: ./pages/concepts/vendor-extensions.mdx
+      slug: vendor-extensions
+  - section: Guides
+    slug: guides
+    contents:
+    - page: Generating a client library
+      path: ./pages/guides/generating-sdks.mdx
+      slug: generating-sdks
+    - page: Encoding requests
+      path: ./pages/guides/request-encoding.mdx
+      slug: request-encoding
+    - page: Expanding related objects
+      path: ./pages/guides/expanding-objects.mdx
+      slug: expanding-objects
+    - page: Handling errors
+      path: ./pages/guides/handling-errors.mdx
+      slug: handling-errors
+    - page: Working with list endpoints
+      path: ./pages/guides/pagination-and-lists.mdx
+      slug: pagination-and-lists
+    - page: Keeping up with spec updates
+      path: ./pages/guides/keeping-specs-current.mdx
+      slug: keeping-specs-current
+  - section: Reference
+    slug: reference
+    contents:
+    - page: Spec files
+      path: ./pages/reference/spec-files.mdx
+      slug: spec-files
+    - page: Extension keys
+      path: ./pages/reference/extensions-reference.mdx
+      slug: extensions-reference
+- tab: api
+  layout:
+  - api: Stripe API
+    api-name: api
+    slug: stripe-api

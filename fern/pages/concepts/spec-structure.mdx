@@ -1,0 +1,46 @@
+---
+title: "How the specs are organised"
+---
+
+This page explains how to find your way around a Stripe OpenAPI spec: paths and operations, operation identifiers, tags, schemas and stable identifiers.
+
+## Paths and operations
+
+The recommended spec, `latest/openapi.spec3.json`, describes the Stripe API with 703 operations.
+
+The `latest/` directory covers both v1 and v2 endpoints, so one file gives you complete API coverage.
+
+Each operation is an HTTP method under a path in the spec. Operations are the unit that SDK generators and other tooling work from. The per-operation layout of this file was not available when this page was written, so open the spec to check the exact shape of a given path (needs confirmation).
+
+## operationId conventions
+
+Every operation is identified by an `operationId`. Use it as the stable handle for an operation when you generate code or build tooling.
+
+The naming pattern used for `operationId` values (needs confirmation). Search the spec for the endpoint you need and read its `operationId` directly rather than guessing it.
+
+## API groups (tags)
+
+Operations are grouped into API groups using OpenAPI tags. Use tags to find related operations, for example when you want every operation for one resource. The list of tag names and how operations map to them is defined in the spec (needs confirmation).
+
+## Schemas such as Account and the Error object
+
+Resource and object shapes are defined as schemas. Two you are likely to look up first are the `Account` schema and the `Error` object. Check the spec for their exact schema names and fields (needs confirmation).
+
+Resource schemas carry Stripe vendor extensions that describe them further:
+
+- `x-resourceId` is a canonical name for each resource. You can use it with the fixtures files under `openapi/fixtures{2,3}.{json,yaml}` to look up a sample representation of the resource.
+- `x-expandableFields` lists the fields on a resource that you can expand by sending an `expand` parameter with the request.
+- `x-expansionResources` sits on an expandable field and references the resources it might expand to.
+
+The README illustrates these with the `charge` resource, where `x-resourceId` is `charge` and `balance_transaction` is listed as an expandable field.
+
+## x-stableId
+
+`x-stableId` is a vendor extension that provides a stable identifier in the spec. Its exact meaning and where it appears are not covered in the README, so check the spec itself before you depend on it (needs confirmation).
+
+## Related pages
+
+- [Vendor extensions and fixtures](/concepts/vendor-extensions) - how Stripe's x- extensions work and link schemas to fixtures
+- [Extension keys](/reference/extensions-reference) - look up each x- vendor extension
+- [Choosing the right spec file](/concepts/choosing-a-spec) - pick between public and SDK specs and between directories
+- [Spec files](/reference/spec-files) - every spec file in the repository

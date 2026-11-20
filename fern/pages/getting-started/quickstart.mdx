@@ -1,0 +1,66 @@
+---
+title: "Quickstart: use a spec"
+---
+
+This quickstart shows how to download a Stripe OpenAPI spec, load it into an OpenAPI tool, and make a first authenticated request to the Stripe API.
+
+## Pick a spec file
+
+Start with the `latest/` directory. It holds the recommended GA release and includes both v1 and v2 endpoints.
+
+For this quickstart, use the public spec in your preferred format. Public specs are named `spec3.{json,yaml}`, and the README recommends them for most purposes. All spec files come in both JSON and YAML.
+
+- `latest/openapi.spec3.json` is the public spec in JSON, with 703 operations.
+- `latest/openapi.spec3.yaml` is the same spec in YAML.
+
+The SDK variant (`spec3.sdk.{json,yaml}`) is meant for generating client libraries, and the README says most users should use the public variant instead.
+
+See [Choosing the right spec file](/concepts/choosing-a-spec) for a fuller comparison. (needs confirmation)
+
+## Download or clone the repository
+
+Clone the repository to get every spec directory at once:
+
+```bash
+git clone https://github.com/stripe/openapi.git
+```
+
+The repository URL comes from the link to its old versions in the README.
+
+You can also download a single file, such as `latest/openapi.spec3.json`, from the repository on GitHub. Release notes are published in the repository's changelog at https://github.com/stripe/openapi/releases/.
+
+## Load the spec into an OpenAPI viewer or validator
+
+The specs are OpenAPI 3.0.0 documents. The README notes that OpenAPI 2.0 is deprecated and no longer updated, so use a tool that supports OpenAPI 3.0.
+
+Open `latest/openapi.spec3.json` or `latest/openapi.spec3.yaml` in the viewer or validator of your choice. The files are not written for any specific tool. In particular, they do not explicitly target openapi-generator, because a custom closed-source generator produces them.
+
+## Find the server URL and an operation
+
+The spec describes the API at `https://api.stripe.com/`.
+
+Once the file is loaded, browse the `paths` section. Each operation has an `operationId` and belongs to a tag, which groups related operations. The spec contains 703 operations, so pick one that suits your first call. A simple `GET` request is the easiest place to start.
+
+Note the operation's path. You append it to the server URL in the next step. To learn how paths, tags and schemas are laid out, see [How the specs are organised](/concepts/spec-structure). (needs confirmation)
+
+## Make a first request with curl and a test API key
+
+The spec declares two security schemes, `basicAuth` and `bearerAuth`. Both use Stripe API keys, and their definitions live under `components/securitySchemes`.
+
+Use a test-mode API key from your Stripe account, not a live key. Replace `YOUR_TEST_API_KEY` and `PATH_FROM_THE_SPEC` in the following command with your key and the path you picked (needs confirmation):
+
+```bash
+curl https://api.stripe.com/PATH_FROM_THE_SPEC \
+  -H "Authorization: Bearer YOUR_TEST_API_KEY"
+```
+
+This command uses the `bearerAuth` scheme, which the spec declares.
+
+If the operation you chose takes a request body, see [Encoding requests](/guides/request-encoding). (needs confirmation)
+
+## Next steps
+
+- [Authentication](/getting-started/authentication) - the basicAuth and bearerAuth schemes in detail
+- [Expanding related objects](/guides/expanding-objects) - retrieve related objects in one call
+- [Handling errors](/guides/handling-errors) - interpret the Error object
+- [Generating a client library](/guides/generating-sdks) - generate a client from an SDK spec

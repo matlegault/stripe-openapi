@@ -1,0 +1,91 @@
+---
+title: "Vendor extensions"
+---
+
+Stripe's specs use x- vendor extensions to carry information that is hard to express in plain OpenAPI, and this page explains how to read each one.
+
+The README says the specification ships "a few vendor-specific fields" for this purpose.
+
+## x-resourceId and fixtures
+
+Resources include `x-resourceId`, a canonical name for each resource.
+
+You can use it with `openapi/fixtures{2,3}.{json,yaml}` to look up a sample representation of the resource, known as a "fixture".
+
+The README's example shows a `charge` definition with `x-resourceId: charge`, and a separate fixtures file keyed by resource name.
+
+```yaml
+# spec.yaml
+---
+definitions:
+  ...
+  charge:
+    ...
+    x-resourceId: charge
+
+# fixtures.yaml
+---
+invoice_line_item:
+  ...
+```
+
+For a task-oriented walkthrough, see [Working with fixtures](/spec-conventions/fixtures). (needs confirmation)
+
+## x-expandableFields
+
+A resource's `x-expandableFields` lists the fields that can be expanded by making an API request with an `expand` parameter.
+
+```yaml
+definitions:
+  ...
+  charge:
+    ...
+    x-expandableFields:
+    - balance_transaction
+```
+
+In this example from the README, `balance_transaction` is expandable on `charge`.
+
+## x-expansionResources
+
+Each expandable field within a resource carries `x-expansionResources`, a set of references to the resources the field might be expanded to.
+
+```yaml
+definitions:
+  ...
+  charge:
+    properties:
+      ...
+      balance_transaction:
+        description: ID of the balance transaction that describes the impact of this
+          charge on your account balance (not including refunds or disputes).
+        type:
+        - string
+        x-expansionResources:
+          oneOf:
+          - "$ref": "#/definitions/balance_transaction"
+```
+
+Here the field is a string ID by default, and `x-expansionResources` points to the `balance_transaction` resource it expands to.
+
+See [Expanding related objects](/spec-conventions/expanding-objects) for how the two expansion extensions work together. (needs confirmation)
+
+## x-stripeReleasePhase
+
+The README does not document `x-stripeReleasePhase`, and no excerpt of the spec files was available for this page. Its allowed values and placement in the spec are (needs confirmation).
+
+For which directory holds which release phase, see [GA, public preview and private preview](/choosing-a-spec/release-phases). (needs confirmation)
+
+## x-stripeBetaHeaders
+
+The README does not document `x-stripeBetaHeaders`. Its structure and where it appears in the spec are (needs confirmation).
+
+## x-stableId
+
+The README does not document `x-stableId`. What it identifies and how stable it is across releases are (needs confirmation).
+
+## Extension interface
+
+The README does not describe a formal interface for these extensions, so the shape of an extension object is (needs confirmation).
+
+The SDK specs, such as, carry special annotations meant to support generating Stripe API libraries. Check the spec file directly when you process an extension that is not described here.

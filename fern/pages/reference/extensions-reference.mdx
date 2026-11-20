@@ -1,0 +1,89 @@
+---
+title: "Extension keys"
+---
+
+This page lists each x- vendor extension that Stripe's OpenAPI specifications use, where it appears and what it means.
+
+The specs ship vendor-specific fields to represent information that is hard to express in standard OpenAPI.
+
+## x-expandableFields
+
+`x-expandableFields` appears on a resource. It holds the list of fields on that resource that you can expand by sending an API request with an `expand` parameter.
+
+The README example shows the `charge` resource listing `balance_transaction` as expandable:
+
+```yaml
+definitions:
+  ...
+  charge:
+    ...
+    x-expandableFields:
+    - balance_transaction
+```
+
+
+
+## x-expansionResources
+
+`x-expansionResources` appears on an individual expandable field inside a resource. It holds a set of references to the resources that the field might be expanded to.
+
+In the README example, the `balance_transaction` property of `charge` is a string ID. Its `x-expansionResources` value points to the `balance_transaction` resource through a `oneOf`:
+
+```yaml
+definitions:
+  ...
+  charge:
+    properties:
+      ...
+      balance_transaction:
+        description: ID of the balance transaction that describes the impact of this
+          charge on your account balance (not including refunds or disputes).
+        type:
+        - string
+        x-expansionResources:
+          oneOf:
+          - "$ref": "#/definitions/balance_transaction"
+```
+
+
+
+Use `x-expandableFields` to find which fields can be expanded, and `x-expansionResources` to find what each one expands to.
+
+## x-resourceId
+
+`x-resourceId` appears on a resource. It is the canonical name of that resource.
+
+You can combine it with `openapi/fixtures{2,3}.{json,yaml}` to look up a sample representation of the resource, called a fixture.
+
+```yaml
+# spec.yaml
+---
+definitions:
+  ...
+  charge:
+    ...
+    x-resourceId: charge
+
+# fixtures.yaml
+---
+invoice_line_item:
+  ...
+```
+
+
+
+## x-stableId
+
+`x-stableId` is not described in the README. Its placement and exact meaning need confirmation against the spec files. (needs confirmation)
+
+For how stable identifiers fit into the structure of a spec, see [How the specs are organised](/concepts/spec-structure). (needs confirmation)
+
+## x-stripeReleasePhase
+
+`x-stripeReleasePhase` relates to the release phase of API functionality, such as GA, public preview or private preview. The README does not document this key, so where it appears and its allowed values need confirmation. (needs confirmation)
+
+For the phases themselves, see [v1, v2 and release phases](/concepts/api-versions-and-release-phases). (needs confirmation)
+
+## x-stripeBetaHeaders
+
+`x-stripeBetaHeaders` relates to the beta headers used by the private-preview SDK spec, `preview/openapi.private_preview.spec3.sdk.json`. The README does not document this key, so its placement and value format need confirmation. (needs confirmation)

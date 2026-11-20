@@ -1,0 +1,55 @@
+---
+title: "Public and SDK specs"
+---
+
+Stripe publishes each OpenAPI specification in a public variant and an SDK variant, and this page helps you decide which one fits your task.
+
+## Public spec
+
+The public spec files are named `spec3.json` and `spec3.yaml`, and the README says to use them for most purposes.
+
+Both variants are available in JSON and YAML.
+
+In the `latest/` directory, the public JSON spec is `latest/openapi.spec3.json`.
+
+## SDK spec
+
+The SDK spec files are named `spec3.sdk.json` and `spec3.sdk.yaml`. They contain special annotations, deprecated endpoints and pre-release features intended to support generating Stripe API libraries.
+
+The README advises that users should typically use the public variant instead.
+
+In the `latest/` directory, the SDK JSON spec is `latest/openapi.spec3.sdk.json`.
+
+## Differences in annotations and operations
+
+| | Public spec | SDK spec |
+|---|---|---|
+| File name | `spec3.{json,yaml}` | `spec3.sdk.{json,yaml}` |
+| Intended use | Most purposes | Generating Stripe API libraries |
+| Annotations | Standard | Special annotations |
+| Deprecated endpoints | Not described in the README | Included |
+| Pre-release features | Not described in the README | Included |
+
+
+
+The README describes the SDK variant as the one carrying the extra content. It does not list the individual annotations.
+
+## Operation counts
+
+The two `latest/` files differ in how many operations they hold:
+
+- `latest/openapi.spec3.json` (public) has 703 operations.
+- `latest/openapi.spec3.sdk.json` (SDK) has 650 operations.
+
+The SDK file has fewer operations than the public file, even though the README says the SDK variant includes deprecated endpoints and pre-release features. The sources do not explain the difference (needs confirmation).
+
+## Picking a variant
+
+- Choose the public spec for general use, such as reading the API surface or integrating with OpenAPI-based tools.
+- Choose the SDK spec when you generate Stripe API client libraries and need its annotations, deprecated endpoints and pre-release features.
+- If you are unsure, use the public spec.
+
+Next steps:
+
+- [GA, public preview and private preview](/choosing-a-spec/release-phases) - which directory holds which release phase
+- [Generating SDKs and clients](/building-tools/generating-sdks) - generate client libraries from the SDK specs

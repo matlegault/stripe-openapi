@@ -1,0 +1,44 @@
+---
+title: "Quickstart: use a spec"
+---
+
+This quickstart walks you through choosing a Stripe OpenAPI spec file, downloading it, loading it into an OpenAPI tool, generating a client and making a first request.
+
+## Choose a spec file
+
+The repository has three directories of specs, and `/latest/` is the recommended one. It holds the latest GA release with both v1 and v2 API endpoints. `/preview/` adds public preview endpoints, and `/openapi/` is a legacy v1-only set.
+
+Every spec is published in JSON and YAML. For most purposes use the public variant (`spec3.{json,yaml}`). The SDK variant (`spec3.sdk.{json,yaml}`) carries extra annotations, deprecated endpoints and pre-release features meant for generating Stripe API libraries, and the README says users should typically use the public variant instead.
+
+For this quickstart, use one of these files, which describe the same 703 operations:
+
+- `latest/openapi.spec3.yaml` (YAML)
+- `latest/openapi.spec3.json` (JSON)
+
+To compare the variants in more depth, see [Public and SDK specs](/choosing-a-spec/spec-variants) and [GA, public preview and private preview](/choosing-a-spec/release-phases). (needs confirmation)
+
+## Download the file
+
+The specs live in the `stripe/openapi` repository on GitHub, and release notes are on its releases page. Clone the repository or download the file from `latest/` in your browser. Older versions of the repository remain available as tags, such as `v83`, which holds the deprecated OpenAPI 2.0 files.
+
+## Load it in an OpenAPI viewer or tool
+
+Open the downloaded JSON or YAML file in any tool that reads OpenAPI 3.0. The spec files are generated OpenAPI 3.0 documents. If your tool rejects the file, check that it supports OpenAPI 3.0 and not only the retired 2.0 format.
+
+Once it loads, you will see Stripe-specific `x-` fields such as `x-expandableFields`, `x-expansionResources` and `x-resourceId`. They carry information that plain OpenAPI cannot express easily. See [Vendor extensions](/spec-conventions/vendor-extensions) for how to read them.
+
+## Generate a client
+
+Point your generator at the spec file you chose. The README says the specs are meant for generating SDKs and client libraries.
+
+The specs do not explicitly target openapi-generator. They are produced by a custom closed-source generator. Check the output of whichever generator you use. See [Generating SDKs and clients](/building-tools/generating-sdks) for caveats and the SDK spec.
+
+## Make a first request with your API key
+
+The specs declare two top-level security schemes, `basicAuth` and `bearerAuth`. Both use a Stripe API key against `https://api.stripe.com/`. The scheme definitions are under `components/securitySchemes`.
+
+1. Pick an operation from the loaded spec and note its path. (needs confirmation)
+2. Configure your generated client or tool with your API key. Use a placeholder such as `YOUR_API_KEY` in code and never commit a real key. (needs confirmation)
+3. Send the request to `https://api.stripe.com/` with the path you chose.
+
+For how to wire the key into `basicAuth` or `bearerAuth` in a generated client, see [Authenticating with API keys](/get-started/authentication). For request bodies and nested parameters, see [Request encoding](/using-the-api/request-encoding). (needs confirmation)

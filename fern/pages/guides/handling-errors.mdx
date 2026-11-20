@@ -1,0 +1,37 @@
+---
+title: "Handling errors"
+---
+
+This page explains where the Error object sits in the Stripe OpenAPI spec and how to plan error handling around it.
+
+## Error object shape in the spec
+
+The Stripe API is described by a single OpenAPI 3.0 document that covers 703 operations in `latest/openapi.spec3.json`.
+
+The Error object is one of the schemas in that document. Open the file in your OpenAPI tool and search the schemas for the error definition to see its exact properties. The property list is not reproduced here because it was not part of the source material for this page (needs confirmation).
+
+For how schemas and operations are laid out in the file, see [How the specs are organised](/concepts/spec-structure). (needs confirmation)
+
+## HTTP status codes
+
+Each operation in the spec lists the responses it can return. Read the `responses` object of an operation to see which status codes it declares, and which schema each one points to.
+
+The meaning of individual status codes, and which of them carry an Error object, are not documented in the material for this page (needs confirmation). Check the operation you are calling.
+
+## Error types and codes
+
+The Error object distinguishes failures by type and code fields (needs confirmation). The complete list of allowed values is best read from the Error schema in the spec, where it is defined.
+
+Authentication failures are a separate case you can plan for. The spec declares two security schemes, `basicAuth` and `bearerAuth`, which both use Stripe API keys against `https://api.stripe.com/`. A request without a valid key cannot succeed.
+
+See [Authentication](/getting-started/authentication) for how to send credentials. (needs confirmation)
+
+## Retrying and idempotency
+
+Decide per operation whether a failed request is safe to repeat. The retry rules and idempotency behavior are not stated in the material for this page (needs confirmation). Look at the parameters and headers an operation declares in before you build retry logic.
+
+## Surfacing errors in generated clients
+
+A client generated from the spec only exposes the error information the spec declares. Generated clients can differ in how they turn error responses into exceptions or result types. For generation steps and the limits of generic generators, see [Generating a client library](/guides/generating-sdks). (needs confirmation)
+
+To choose between the public and SDK variants of the spec before you generate, see [Choosing the right spec file](/concepts/choosing-a-spec). (needs confirmation)

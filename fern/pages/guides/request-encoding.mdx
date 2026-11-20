@@ -1,0 +1,35 @@
+---
+title: "Encoding requests"
+---
+
+This guide explains how to build form-urlencoded request bodies for the Stripe API using the request definitions in the OpenAPI specs.
+
+## Form-urlencoded bodies
+
+The Stripe API is described in `latest/openapi.spec3.json`, which covers 703 operations ().
+
+To see how an operation expects its body, open the operation in the spec and read its `requestBody` entry. The media type listed under `content` tells you the encoding. For Stripe's POST operations, this is form-urlencoded (needs confirmation). The schema under that media type lists the fields you can send ().
+
+Authenticate every request with one of the two security schemes declared in the spec, `basicAuth` or `bearerAuth`. Both use Stripe API keys against `https://api.stripe.com/` (). See [Authentication](/getting-started/authentication) for details.
+
+## Nested objects and arrays
+
+A body schema can contain object properties and array properties. Read each property's `type`, `properties` and `items` in the schema to learn its shape ().
+
+The exact key syntax used to flatten nested objects and arrays into form fields, such as bracketed keys, is not shown in the material this page was written from (needs confirmation). Confirm it against the `encoding` entries in the spec before you hand-write a body.
+
+## deepObject query parameters
+
+OpenAPI describes how a structured query parameter is serialized through the parameter's `style` and `explode` fields. The value `deepObject` is one of the `style` values the OpenAPI 3.0 format defines ().
+
+Which Stripe operations use `deepObject` for their query parameters, and how the resulting keys look, is not shown in the material this page was written from (needs confirmation). Look at the `parameters` of the operation you are calling.
+
+## Handling encoding in generated clients
+
+The spec files are produced by a closed-source generator and are not targeted at openapi-generator (). A generic generator may therefore not reproduce Stripe's form encoding exactly. Test a generated client against requests that contain nested objects and arrays before you rely on it (needs confirmation).
+
+For related guidance, see these pages:
+
+- [Generating a client library](/guides/generating-sdks) - generate a client from an SDK spec and know the limits of generic generators
+- [How the specs are organised](/concepts/spec-structure) - find operations, schemas and parameters in a spec
+- [Choosing the right spec file](/concepts/choosing-a-spec) - pick the spec variant that fits your use case

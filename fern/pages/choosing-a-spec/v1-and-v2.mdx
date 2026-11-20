@@ -1,0 +1,42 @@
+---
+title: "v1 and v2 APIs in one spec"
+---
+
+This page explains how Stripe's v1 and v2 API endpoints are published together in the same OpenAPI files, and what that means when you generate code from them.
+
+## v1 and v2 paths
+
+The `latest/` directory holds the latest generally available release. Its specifications contain both v1 and v2 API endpoints and events, so one file gives complete API coverage.
+
+The `preview/` directory is the same as `latest/` but also includes public preview endpoints. So the v1 and v2 combination applies to both of those directories.
+
+The GA JSON spec, `latest/openapi.spec3.json`, describes 703 operations.
+
+Both versions use the same top-level security schemes, `basicAuth` and `bearerAuth`, with a Stripe API key against `https://api.stripe.com/`. The scheme definitions live under `components/securitySchemes`. See [Authenticating with API keys](/get-started/authentication) for how to configure them.
+
+## Differences in conventions
+
+The repository README links to Stripe's v2 API overview for the details of how v2 differs from v1. It does not itself describe differences in request encoding, pagination or other conventions. Check the operations you plan to call in the spec and in Stripe's v2 overview rather than assuming v1 behavior carries over (needs confirmation).
+
+The vendor extensions described in the README, such as `x-expandableFields`, `x-expansionResources` and `x-resourceId`, are part of the specification format. See [Vendor extensions](/spec-conventions/vendor-extensions) for how to read them.
+
+## Legacy openapi directory
+
+The `openapi/` directory is legacy and contains v1-only endpoint specifications.
+
+It is still updated with every release. Existing users of `openapi/` do not need to change anything, because its structure remains unchanged.
+
+For new projects, the README recommends `latest/` for complete API coverage.
+
+## Impact on client generation
+
+- Generating from `latest/` gives a client that can cover both v1 and v2 endpoints and events from a single input file.
+- Generating from `openapi/` gives a client limited to v1 endpoints.
+- The `spec3.sdk` variant carries extra annotations, deprecated endpoints and pre-release features intended for generating Stripe API libraries. The README advises most users to use the public `spec3` variant instead.
+- The specs do not explicitly target openapi-generator. They are produced by a custom closed-source generator.
+
+Next steps:
+
+- [Public and SDK specs](/choosing-a-spec/spec-variants) - choose between spec3 and spec3.sdk
+- [GA, public preview and private preview](/choosing-a-spec/release-phases) - which directory holds which release phase
+- [Generating SDKs and clients](/building-tools/generating-sdks) - generate client libraries from the specs

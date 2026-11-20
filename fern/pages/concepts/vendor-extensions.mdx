@@ -1,0 +1,92 @@
+---
+title: "Vendor extensions and fixtures"
+---
+
+This page explains the vendor-specific x- fields in Stripe's OpenAPI specs and how x-resourceId links a resource to a sample fixture.
+
+## Why extensions exist
+
+The specs ship with a few vendor-specific fields. They represent information that is difficult to express in OpenAPI by default.
+
+The specs are produced by a custom, closed-source generator. They do not explicitly target openapi-generator.
+
+The README documents three extensions: `x-expandableFields`, `x-expansionResources` and `x-resourceId`. For a lookup of every key, see [Extension keys](/reference/extensions-reference).
+
+## x-expandableFields and x-expansionResources
+
+Stripe lets you request related objects inline by making an API request with an `expand` parameter. Two extensions describe this in the spec.
+
+`x-expandableFields` sits on a resource. It lists the fields of that resource that you can expand.
+
+```yaml
+definitions:
+  ...
+  charge:
+    ...
+    x-expandableFields:
+    - balance_transaction
+```
+
+`x-expansionResources` sits on an expandable field inside a resource. It holds references to the resources that the field might expand to.
+
+```yaml
+definitions:
+  ...
+  charge:
+    properties:
+      ...
+      balance_transaction:
+        description: ID of the balance transaction that describes the impact of this
+          charge on your account balance (not including refunds or disputes).
+        type:
+        - string
+        x-expansionResources:
+          oneOf:
+          - "$ref": "#/definitions/balance_transaction"
+```
+
+In this example the field is a string ID by default. `x-expansionResources` tells you that, when expanded, it can become a `balance_transaction` object.
+
+To use these extensions in requests, see [Expanding related objects](/guides/expanding-objects). (needs confirmation)
+
+## x-resourceId and fixtures
+
+Resources carry `x-resourceId`, a canonical name for the resource.
+
+You can use this name with the fixtures files, `openapi/fixtures{2,3}.{json,yaml}`, to look up a sample representation of the resource. That sample is called a fixture.
+
+```yaml
+# spec.yaml
+---
+definitions:
+  ...
+  charge:
+    ...
+    x-resourceId: charge
+
+# fixtures.yaml
+---
+invoice_line_item:
+  ...
+```
+
+The lookup works by matching the `x-resourceId` value in the spec to a top-level key in the fixtures file.
+
+## Extension interface
+
+The README does not define a separate "Extension interface". In the material available for this page, the contract between the spec and your tooling is the set of x- fields on resources and properties described above.
+
+The product's key concepts also name other extensions, such as `x-stripeBetaHeaders`, `x-stripeReleasePhase` and `x-stableId`. Their exact shape and placement in and are (needs confirmation) here. Check the [Extension keys](/reference/extensions-reference) reference or the spec files themselves.
+
+## Handling unknown extensions in tools
+
+The README does not specify how a tool should react to extensions it does not recognise. It states only that the extensions carry information OpenAPI cannot represent by default.
+
+Keep these points in mind when you build or choose tooling:
+
+- Because the specs are not written for openapi-generator, expect to handle Stripe-specific fields yourself if your tool does not read them.
+- If you need the expandable-field information, read `x-expandableFields` and `x-expansionResources` directly from the spec.
+- If you need sample data, join `x-resourceId` against the fixtures files.
+- SDK specs, `spec3.sdk`, contain special annotations that support generating Stripe API libraries. Most users should use the public `spec3` variant instead.
+
+To pick between the two variants, see [Choosing the right spec file](/concepts/choosing-a-spec).

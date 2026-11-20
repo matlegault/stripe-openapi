@@ -1,0 +1,74 @@
+---
+title: "Generating SDKs and clients"
+---
+
+This guide explains which Stripe OpenAPI spec file to feed a client generator, what to expect from the closed-source generator behind the specs, and how to track new releases.
+
+## Which spec to feed a generator
+
+For most generation work, start from the `latest/` directory. It holds the latest GA release and includes both v1 and v2 endpoints and events, so one file gives complete API coverage. recommends these files for generating SDKs or client libraries.
+
+Every spec is available in JSON and YAML.
+
+The repository publishes two variants of each spec:
+
+- **Public specs** (`spec3.{json,yaml}`): the README says to use these for most purposes.
+- **SDK specs** (`spec3.sdk.{json,yaml}`): these contain special annotations, deprecated endpoints and pre-release features intended to support generating Stripe API libraries. The README adds that users should typically use the public variant instead.
+
+The SDK spec in `latest/` is `latest/openapi.spec3.sdk.yaml`, which describes 650 operations.
+
+The legacy `openapi/` directory holds v1-only specs. They are still updated every release, but new projects are advised to use `latest/`.
+
+For the trade-offs between the variants, see [Public and SDK specs](/choosing-a-spec/spec-variants). For how v1 and v2 coexist in generated code, see [v1 and v2 APIs in one spec](/choosing-a-spec/v1-and-v2).
+
+## Closed-source generator notes
+
+The specs do not explicitly target [openapi-generator](https://github.com/OpenAPITools/openapi-generator). They are produced by a custom closed-source generator. Expect to verify the output of your chosen tool against the spec rather than assuming it will work out of the box.
+
+The specs use vendor extensions that a generator may need to handle or ignore:
+
+- `x-expandableFields` lists the fields of a resource that can be expanded with the `expand` request parameter.
+- `x-expansionResources` on an expandable field holds references to the resources it might be expanded to, using `oneOf`.
+- `x-resourceId` is a canonical name for each resource. It can be combined with `openapi/fixtures{2,3}.{json,yaml}` to look up a sample representation of the resource.
+
+Example of an expandable field on a resource, from the README:
+
+```yaml
+definitions:
+  ...
+  charge:
+    properties:
+      ...
+      balance_transaction:
+        type:
+        - string
+        x-expansionResources:
+          oneOf:
+          - "$ref": "#/definitions/balance_transaction"
+```
+
+
+
+OpenAPI 2.0 is deprecated and no longer updated. It is only available in [old versions](https://github.com/stripe/openapi/tree/v83) of the repository.
+
+See [Vendor extensions](/spec-conventions/vendor-extensions) and [Expanding related objects](/spec-conventions/expanding-objects) for more on these annotations. Generated clients must also authenticate; see [Authenticating with API keys](/get-started/authentication).
+
+## Using preview specs
+
+The `preview/` directory is the same as `latest/` but also includes public preview API endpoints, giving early access to upcoming features before GA.
+
+The preview SDK spec is `preview/openapi.spec3.sdk.yaml`, which describes 803 operations, compared with 650 in the `latest/` SDK spec.
+
+Preview endpoints are not generally available, so generate from `preview/` only when you need early access. For the release phases and how `x-stripeReleasePhase` marks them, see [GA, public preview and private preview](/choosing-a-spec/release-phases).
+
+## Keeping up with new spec versions
+
+The repository publishes a changelog on its GitHub releases page. Check it to see what changed before regenerating a client.
+
+The legacy `openapi/` files are still updated with every release, and the existing structure remains unchanged for current users.
+
+## Next steps
+
+- [Quickstart: use a spec](/get-started/quickstart) - download a spec and generate a first client
+- [Request encoding](/using-the-api/request-encoding) - send correctly encoded requests from generated clients
+- [Handling errors](/using-the-api/errors) - interpret the Error object returned by failed calls

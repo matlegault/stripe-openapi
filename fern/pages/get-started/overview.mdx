@@ -1,0 +1,59 @@
+---
+title: "Overview"
+---
+
+This page explains what the Stripe OpenAPI repository publishes, which spec files exist and who they are for.
+
+## What this repository contains
+
+The repository contains OpenAPI specifications for Stripe's API.
+
+The specs are generated with a custom closed-source generator and do not explicitly target openapi-generator.
+
+OpenAPI 2.0 is deprecated and no longer receives updates. It remains available in old versions of the repository.
+
+The spec files declare the Stripe API as OpenAPI 3.0.0. The `latest` public spec describes 703 operations, and the `preview` SDK spec describes 803.
+
+The specs also use vendor extensions, such as `x-expandableFields`, `x-expansionResources` and `x-resourceId`, to represent information that is hard to express in plain OpenAPI.
+
+## Directory layout: latest, preview, openapi
+
+The specs are split across three directories.
+
+| Directory | Description |
+|-----------|-------------|
+| `/latest/` | Recommended. The latest GA release, with v1 and v2 API endpoints. |
+| `/preview/` | Same as `/latest/`, but includes public preview API endpoints. |
+| `/openapi/` | Legacy. v1-only endpoint specifications, still updated every release. |
+
+
+
+- **`/latest/`** holds the latest generally available release. Use it to generate SDKs or client libraries. It covers v1 and v2 endpoints and events in a single file.
+- **`/preview/`** holds the latest public preview release. Use it for early access to upcoming API features before GA.
+- **`/openapi/`** holds the original files with v1 endpoints only. They are still updated with every release, but new projects are recommended to use `/latest/`. If you already use `/openapi/`, nothing needs to change.
+
+## JSON and YAML formats
+
+Every specification file is available in both JSON and YAML.
+
+Each directory offers two variants:
+
+- **Public specs** (`spec3.{json,yaml}`) are the ones to use for most purposes.
+- **SDK specs** (`spec3.sdk.{json,yaml}`) contain special annotations, deprecated endpoints and pre-release features intended to support generating Stripe API libraries. Users should typically use the public variant instead.
+
+## Who should use these specs
+
+- Developers generating SDKs or client libraries should start from `/latest/`, which gives complete v1 and v2 coverage in a single file.
+- Developers who want early access to upcoming features can use `/preview/`.
+- Teams already built on the v1-only files can keep using `/openapi/`.
+- Most other users, such as those building tooling or integrating with OpenAPI-based tools, should use the public variant rather than the SDK variant.
+
+## Where to go next
+
+- [Quickstart: use a spec](/get-started/quickstart) - download a spec, validate it and load it into a tool
+- [Authenticating with API keys](/get-started/authentication) - configure the security schemes in generated clients
+- [Public and SDK specs](/choosing-a-spec/spec-variants) - choose between the two variants
+- [GA, public preview and private preview](/choosing-a-spec/release-phases) - see which directory holds which release phase
+- [v1 and v2 APIs in one spec](/choosing-a-spec/v1-and-v2) - how both API versions coexist
+- [Vendor extensions](/spec-conventions/vendor-extensions) - interpret the x- extensions
+- [Generating SDKs and clients](/building-tools/generating-sdks) - build client libraries from the SDK specs
