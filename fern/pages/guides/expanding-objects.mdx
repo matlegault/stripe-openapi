@@ -1,0 +1,73 @@
+---
+title: "Expanding related objects"
+---
+
+This guide explains how to use the expand parameter and the expandable-field extensions in the Stripe OpenAPI specs to retrieve related objects in one call.
+
+## What expandable fields are
+
+Some fields on a Stripe resource refer to another resource. By default, the field holds the related object's ID. If you make an API request with an `expand` parameter, the field can return the full related object instead.
+
+The specs describe which fields can be expanded through two vendor extensions: `x-expandableFields` and `x-expansionResources`.
+
+## Using the expand parameter
+
+Expansion is requested by making an API request with an `expand` parameter. The README links to Stripe's [expanding objects](https://stripe.com/docs/api/#expanding_objects) documentation for the request behavior.
+
+To decide what to pass, look up the resource in the spec and read its `x-expandableFields` list. Only the fields named there can be expanded.
+
+The excerpts I was given do not show the exact syntax of the `expand` parameter, so check the operation's parameters in and Stripe's expanding objects documentation before you build requests.
+
+## Reading x-expandableFields
+
+Each resource that has expandable fields carries an `x-expandableFields` extension. It lists the fields you can expand by sending an `expand` parameter.
+
+In this example, the `charge` resource lists `balance_transaction` as expandable:
+
+```yaml
+definitions:
+  ...
+  charge:
+    ...
+    x-expandableFields:
+    - balance_transaction
+```
+
+
+
+## Reading x-expansionResources
+
+Each expandable field contains an `x-expansionResources` extension. It holds references to the resources the field might be expanded to.
+
+In this example, the `balance_transaction` property of `charge` is a string ID that can expand to the `balance_transaction` resource:
+
+```yaml
+definitions:
+  ...
+  charge:
+    properties:
+      ...
+      balance_transaction:
+        description: ID of the balance transaction that describes the impact of this
+          charge on your account balance (not including refunds or disputes).
+        type:
+        - string
+        x-expansionResources:
+          oneOf:
+          - "$ref": "#/definitions/balance_transaction"
+```
+
+
+
+The `oneOf` list names every resource type the field can become. A field with one reference expands to one type. A field with several references can expand to any one of them.
+
+## Typing expanded responses in clients
+
+Treat an expandable field as either an ID or a full object. The unexpanded schema declares the field as a string, and `x-expansionResources` points to the object schema it can become.
+
+To build a typed client, you can:
+
+- Read `x-expandableFields` on each resource to know which fields need a union of ID and object.
+- Read `x-expansionResources` on each such field to get the schemas for the object side of the union.
+
+Stripe's SDK specs are intended for generating client libraries. See [Generating a client library](/guides/generating-sdks) for the limits of using generic generators. For all extension keys, see [Extension keys](/reference/extensions-reference). (needs confirmation)

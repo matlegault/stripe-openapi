@@ -1,0 +1,49 @@
+---
+title: "Authentication"
+---
+
+This page explains how the Stripe OpenAPI specs describe authentication through the basicAuth and bearerAuth security schemes, and how those schemes relate to Stripe API keys.
+
+## Security schemes in the specs
+
+The specs declare two security schemes at the top level: `basicAuth` and `bearerAuth`. Both authenticate with Stripe API keys against `https://api.stripe.com/`.
+
+The scheme definitions live under `components/securitySchemes` in the spec files.
+
+The same declarations apply across the directories the repository publishes: `latest/`, `preview/` and the legacy `openapi/` set.
+
+## API keys
+
+Both schemes use a Stripe API key as the credential.
+
+The specs only declare how a key is sent. The key itself is yours to supply. In the examples below, `YOUR_API_KEY` is a placeholder for it.
+
+## Basic authentication
+
+`basicAuth` is the first of the two declared schemes. It sends your Stripe API key using HTTP Basic authentication.
+
+Which parts of the Basic credential carry the key, such as username and password, are not shown in the source material (needs confirmation). Check the `basicAuth` entry under `components/securitySchemes` in the spec you use.
+
+## Bearer authentication
+
+`bearerAuth` is the second declared scheme. It sends your Stripe API key as a bearer token.
+
+With a bearer scheme, the key goes in the `Authorization` header:
+
+```text
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Using the schemes in generated clients
+
+The specs are intended for generating SDKs and client libraries.
+
+Tools that read OpenAPI security schemes can pick up `basicAuth` and `bearerAuth` from `components/securitySchemes`.
+
+The specs are produced by a custom closed-source generator and do not explicitly target openapi-generator. Confirm how your tool handles each scheme.
+
+For a first authenticated call, see [Quickstart: use a spec](/getting-started/quickstart). To generate a client, see [Generating a client library](/guides/generating-sdks). (needs confirmation)
+
+## Keeping keys secret
+
+An API key is a credential, so keep it out of spec files and source control. Use a placeholder such as `YOUR_API_KEY` in examples and supply the real value at runtime. (needs confirmation)

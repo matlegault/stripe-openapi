@@ -1,0 +1,42 @@
+---
+title: "Working with list endpoints"
+---
+
+This guide explains how to page through list responses and how to recognise list and search patterns in the Stripe OpenAPI specs.
+
+The spec you read is the public GA spec, `latest/openapi.spec3.json`, which describes 703 operations (). Check each detail below against the operation and schema definitions in that file before you build on it.
+
+## List response objects
+
+List endpoints return a wrapper object that holds a page of results rather than a bare array. In the spec, find a list operation, open its 200 response, and follow the `$ref` to the response schema. The schema shows the exact property names and types. (needs confirmation: the wrapper's `object` value is `list` and the page of results sits under a `data` property.)
+
+Read the `data` item type to learn which resource the endpoint returns. Pass that type to your client or tooling so that each page is typed.
+
+## Cursor parameters
+
+List operations take their paging controls as query parameters. Read the `parameters` array on the operation to see which ones it accepts, along with their types and descriptions. (needs confirmation: the cursor parameters are `limit`, `starting_after` and `ending_before`.)
+
+A cursor is a value taken from a result you already received, not a page number. To fetch the next page, pass the identifier of the last object you received as the forward cursor. (needs confirmation)
+
+## has_more and iteration
+
+The list response schema indicates whether more results exist. (needs confirmation: the property is a boolean named `has_more`.)
+
+Iterate in this order:
+
+1. Request the first page with no cursor.
+2. Process the items in `data`.
+3. If the response says more results exist, request again with the cursor set to the last item's identifier.
+4. Stop when the response says no more results exist.
+
+This loop follows from the cursor model described above, so confirm the property and parameter names in the spec before you implement it. (needs confirmation)
+
+## Search endpoints
+
+Search endpoints are separate operations from list endpoints. Find them by scanning operation paths and `operationId` values in the spec for search operations. Their parameters and response schema differ from those of list operations, so read each one on its own. (needs confirmation: search paths end in `/search`, take a `query` parameter, and use page-token paging rather than object-id cursors.)
+
+Related pages:
+
+- [How the specs are organised](/concepts/spec-structure) - find operations, tags and schemas
+- [Expanding related objects](/guides/expanding-objects) - retrieve related objects in list results
+- [Handling errors](/guides/handling-errors) - interpret failed requests

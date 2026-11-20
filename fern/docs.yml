@@ -4,7 +4,7 @@ title: Stripe's OpenAPI Specification
 colors:
   accent-primary:
     light: '#635bff'
-    dark: '#92adff'
+    dark: '#b9b9f9'
   background:
     light: '#fafaff'
     dark: '#05050d'
@@ -29,60 +29,63 @@ layout:
 navigation:
 - tab: docs
   layout:
-  - section: Get started
-    slug: get-started
+  - section: Getting started
+    slug: getting-started
     contents:
     - page: Overview
-      path: ./pages/get-started/overview.mdx
+      path: ./pages/getting-started/overview.mdx
       slug: overview
     - page: 'Quickstart: use a spec'
-      path: ./pages/get-started/quickstart.mdx
+      path: ./pages/getting-started/quickstart.mdx
       slug: quickstart
-    - page: Authenticating with API keys
-      path: ./pages/get-started/authentication.mdx
+    - page: Authentication
+      path: ./pages/getting-started/authentication.mdx
       slug: authentication
-  - section: Choosing a spec
-    slug: choosing-a-spec
+  - section: Concepts
+    slug: concepts
     contents:
-    - page: Public and SDK specs
-      path: ./pages/choosing-a-spec/spec-variants.mdx
-      slug: spec-variants
-    - page: GA, public preview and private preview
-      path: ./pages/choosing-a-spec/release-phases.mdx
-      slug: release-phases
-    - page: v1 and v2 APIs in one spec
-      path: ./pages/choosing-a-spec/v1-and-v2.mdx
-      slug: v1-and-v2
-  - section: Spec conventions
-    slug: spec-conventions
-    contents:
-    - page: Vendor extensions
-      path: ./pages/spec-conventions/vendor-extensions.mdx
+    - page: Choosing the right spec file
+      path: ./pages/concepts/choosing-a-spec.mdx
+      slug: choosing-a-spec
+    - page: v1, v2 and release phases
+      path: ./pages/concepts/api-versions-and-release-phases.mdx
+      slug: api-versions-and-release-phases
+    - page: How the specs are organised
+      path: ./pages/concepts/spec-structure.mdx
+      slug: spec-structure
+    - page: Vendor extensions and fixtures
+      path: ./pages/concepts/vendor-extensions.mdx
       slug: vendor-extensions
-    - page: Expanding related objects
-      path: ./pages/spec-conventions/expanding-objects.mdx
-      slug: expanding-objects
-    - page: Working with fixtures
-      path: ./pages/spec-conventions/fixtures.mdx
-      slug: fixtures
-    - page: API groups and operation IDs
-      path: ./pages/spec-conventions/tags-and-operations.mdx
-      slug: tags-and-operations
-  - section: Using the API
-    slug: using-the-api
+  - section: Guides
+    slug: guides
     contents:
-    - page: Request encoding
-      path: ./pages/using-the-api/request-encoding.mdx
-      slug: request-encoding
-    - page: Handling errors
-      path: ./pages/using-the-api/errors.mdx
-      slug: errors
-  - section: Building with the specs
-    slug: building-tools
-    contents:
-    - page: Generating SDKs and clients
-      path: ./pages/building-tools/generating-sdks.mdx
+    - page: Generating a client library
+      path: ./pages/guides/generating-sdks.mdx
       slug: generating-sdks
+    - page: Encoding requests
+      path: ./pages/guides/request-encoding.mdx
+      slug: request-encoding
+    - page: Expanding related objects
+      path: ./pages/guides/expanding-objects.mdx
+      slug: expanding-objects
+    - page: Handling errors
+      path: ./pages/guides/handling-errors.mdx
+      slug: handling-errors
+    - page: Working with list endpoints
+      path: ./pages/guides/pagination-and-lists.mdx
+      slug: pagination-and-lists
+    - page: Keeping up with spec updates
+      path: ./pages/guides/keeping-specs-current.mdx
+      slug: keeping-specs-current
+  - section: Reference
+    slug: reference
+    contents:
+    - page: Spec files
+      path: ./pages/reference/spec-files.mdx
+      slug: spec-files
+    - page: Extension keys
+      path: ./pages/reference/extensions-reference.mdx
+      slug: extensions-reference
 - tab: api
   layout:
   - api: Stripe API

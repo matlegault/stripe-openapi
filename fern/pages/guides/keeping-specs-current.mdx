@@ -1,0 +1,35 @@
+---
+title: "Keeping up with spec updates"
+---
+
+This guide explains how Stripe publishes new OpenAPI spec releases, how to pin your tooling to a version, and where to find what changed.
+
+## How the specs are published
+
+The specs live in one repository, in three directories: `/latest/` for the latest GA release, `/preview/` for the same content plus public preview endpoints, and `/openapi/` for the legacy v1-only set.
+
+Every directory ships each spec as JSON and YAML, in a public variant (`spec3`) and an SDK variant (`spec3.sdk`).
+
+The legacy `/openapi/` files are still updated with every release. If you use them today, you don't need to change anything.
+
+Because the files are updated in place, the path you read from does not change between releases. Pinning, described next, is how you control which version of that file you use. See [Choosing the right spec file](/concepts/choosing-a-spec) for help picking a path. (needs confirmation)
+
+## Pinning to a commit or release
+
+The repository keeps older versions available. The README links to the `v83` tree for the deprecated OpenAPI 2.0 specs, which shows that releases can be browsed as tags of the repository.
+
+To pin your tooling, fetch or vendor the spec files from a specific tag or commit instead of the default branch. The README does not document the naming scheme for current release tags or a recommended pinning method (needs confirmation). Check the releases page to see which tags exist.
+
+## Diffing two spec versions
+
+To see what changed between two releases, compare the same file at two pinned versions. For example, compare the `/latest/` public spec in JSON or YAML at the old and new release. Compare like with like: the same directory, the same variant (public or SDK) and the same format.
+
+The README does not describe a built-in diff tool or changelog format for the spec files (needs confirmation). Any generic text or OpenAPI diff tool that you already use will work on the files.
+
+SDK specs contain special annotations, deprecated endpoints and pre-release features. A diff of an SDK spec can therefore show more changes than a diff of the public spec.
+
+## Where release notes live
+
+The README points to the repository's releases page as the changelog: https://github.com/stripe/openapi/releases/.
+
+For background on preview versus GA content, see [v1, v2 and release phases](/concepts/api-versions-and-release-phases). (needs confirmation)

@@ -1,0 +1,66 @@
+---
+title: "Choosing the right spec file"
+---
+
+This page helps you decide between public and SDK specs, JSON and YAML, and the latest, preview and legacy directories.
+
+The repository ships the same API in several files. You make three choices: the variant (public or SDK), the directory (`latest`, `preview` or `openapi`), and the format (JSON or YAML). Every specification file is available in both JSON and YAML, so the format is a matter of what your tooling prefers.
+
+## Public specs (spec3)
+
+Public specs use the file name pattern `spec3.{json,yaml}`. The README says to use these for most purposes.
+
+The public spec in `latest/` contains 703 operations.
+
+## SDK specs (spec3.sdk)
+
+SDK specs use the file name pattern `spec3.sdk.{json,yaml}`. They contain special annotations, deprecated endpoints and pre-release features. These are intended to support generating Stripe API libraries. The README advises that you should typically use the public variant instead.
+
+The SDK spec in `latest/` contains 650 operations.
+
+The SDK spec in `preview/` contains 803 operations.
+
+The specs are produced by a custom closed-source generator and do not explicitly target openapi-generator. Keep that in mind if you feed an SDK spec to a generic tool.
+
+## Latest vs preview vs legacy
+
+| Directory | What it holds |
+|-----------|---------------|
+| `/latest/` | Recommended. The latest GA release with v1 and v2 API endpoints. |
+| `/preview/` | Same as `/latest/`, but includes public preview API endpoints. |
+| `/openapi/` | Legacy. v1-only endpoint specifications, still updated every release. |
+
+
+
+- **`latest`**: Use it to generate SDKs or client libraries. It includes both v1 and v2 endpoints and events, so one file gives complete API coverage.
+- **`preview`**: Use it for early access to upcoming API features before GA release.
+- **`openapi`**: Contains v1 endpoints only. If you already use it, you don't need to change anything. New projects should use `/latest/` for complete API coverage.
+
+## Why operation counts differ
+
+The operation counts shown in the sources differ by file:
+
+| File | Operations |
+|------|-----------|
+| `latest/openapi.spec3.json` | 703 |
+| `latest/openapi.spec3.sdk.json` | 650 |
+| `preview/openapi.spec3.sdk.json` | 803 |
+
+,,
+
+The preview SDK spec has more operations than the latest SDK spec because `/preview/` adds public preview endpoints on top of `/latest/`.
+
+The SDK spec in `latest/` has fewer operations than the public spec in the same directory. The sources do not explain this difference, so do not assume that an SDK spec is a superset of a public spec by operation count (needs confirmation).
+
+## Recommendations by use case
+
+- **General use, tooling or integration:** use the public spec in `/latest/`, in whichever of JSON or YAML your tool reads.
+- **Generating a client library:** the README says to use `/latest/` files to generate SDKs or client libraries. The SDK variant is intended for generating Stripe API libraries, but the README still advises the public variant for most users.
+- **Trying upcoming features:** use `/preview/` for public preview endpoints.
+- **Existing v1-only setups:** keep using `/openapi/`. It keeps receiving updates.
+
+## Next steps
+
+- [Spec files](/reference/spec-files) - every spec file with its directory, variant and format
+- [Generating a client library](/guides/generating-sdks) - generate a client from an SDK spec
+- [v1, v2 and release phases](/concepts/api-versions-and-release-phases) - how GA and preview functionality differ

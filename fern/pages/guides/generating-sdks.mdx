@@ -1,0 +1,73 @@
+---
+title: "Generating a client library"
+---
+
+This guide explains how to pick an SDK spec, run a generator against it, and what to expect from vendor extensions, deprecated operations and generic generators.
+
+## Choose the SDK spec
+
+The repository publishes each spec as JSON and YAML, in two variants: public specs (`spec3.{json,yaml}`) and SDK specs (`spec3.sdk.{json,yaml}`).
+
+SDK specs contain special annotations, deprecated endpoints and pre-release features. They exist to support generating Stripe API libraries.
+
+The README also says users should typically use the public variant instead. Choose the SDK spec only if you need the annotations, deprecated endpoints or pre-release features described above.
+
+For the directory, use `latest/`. It is the recommended GA release and includes both v1 and v2 endpoints and events in a single file. The SDK spec for that release is available in two formats:
+
+- `latest/openapi.spec3.sdk.json` - 650 operations.
+- `latest/openapi.spec3.sdk.yaml` - 650 operations.
+
+The `preview/` directory is the same as `latest/` but adds public preview endpoints. `/openapi/` is a legacy v1-only set.
+
+For a fuller comparison, see [Choosing the right spec file](/concepts/choosing-a-spec). (needs confirmation)
+
+## Run a generator
+
+The specs are standard OpenAPI 3.0 files, so you point your generator at the SDK spec file, either the JSON or the YAML version. The repository does not document a specific generator command, and this page does not invent one.
+
+The generator input is the raw file from the `latest/` directory, for example `latest/openapi.spec3.sdk.yaml`.
+
+Requests authenticate against `https://api.stripe.com/` with Stripe API keys. The specs declare two top-level security schemes, `basicAuth` and `bearerAuth`, under `components/securitySchemes`. Configure your generated client to supply an API key through one of them, using a placeholder such as `YOUR_API_KEY` in examples.
+
+See [Authentication](/getting-started/authentication) for details on the security schemes. (needs confirmation)
+
+## Handle vendor extensions
+
+The specs carry vendor-specific fields for information that is hard to express in plain OpenAPI. A generic generator ignores fields it does not recognize, so you must read these yourself if your client should use them.
+
+- `x-expandableFields` lists the fields on a resource that you can expand by sending an `expand` parameter.
+- `x-expansionResources` sits on an expandable field and holds references to the resources it might be expanded to, as a `oneOf` of `$ref` entries.
+- `x-resourceId` is the canonical name of a resource. You can use it with `openapi/fixtures{2,3}.{json,yaml}` to look up a sample representation, called a fixture.
+
+An example of `x-expandableFields` on the `charge` resource:
+
+```yaml
+definitions:
+  ...
+  charge:
+    ...
+    x-expandableFields:
+    - balance_transaction
+```
+
+
+
+For more detail, see [Vendor extensions and fixtures](/concepts/vendor-extensions) and [Extension keys](/reference/extensions-reference). (needs confirmation)
+
+## Handle deprecated and pre-release operations
+
+SDK specs include deprecated endpoints and pre-release features that the public specs leave out. A client generated from an SDK spec will therefore expose operations that the public spec does not.
+
+Decide before you generate whether your library should expose them. If it should not, generate from the public spec instead.
+
+To learn how to tell release phases apart in the spec, see [v1, v2 and release phases](/concepts/api-versions-and-release-phases). (needs confirmation)
+
+## Known caveats with openapi-generator
+
+The specs do not explicitly target [openapi-generator](https://github.com/OpenAPITools/openapi-generator). Stripe produces them with a custom closed-source generator.
+
+In practice, this means output from openapi-generator or similar generic tools is not guaranteed to be complete or idiomatic. The repository does not list specific failures, so test any generated client against the endpoints you rely on.
+
+The specs are OpenAPI 3.0 only. OpenAPI 2.0 support is deprecated and no longer updated. It remains available in [old versions](https://github.com/stripe/openapi/tree/v83) of the repository.
+
+To keep your generated client in step with the specs, see [Keeping up with spec updates](/guides/keeping-specs-current). (needs confirmation)
